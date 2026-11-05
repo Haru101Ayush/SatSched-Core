@@ -10,6 +10,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.util.*;
 
@@ -26,6 +31,7 @@ import java.util.*;
  *   GET  /api/timetable/conflicts   — dataConflicts + schedulingConflicts
  *   GET  /api/timetable/status      — Last solver run status
  */
+@Tag(name = "Timetable API", description = "Operations for loading data, running the CP-SAT solver, and querying timetables and conflicts")
 @RestController
 @RequestMapping("/api/timetable")
 @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
@@ -56,6 +62,11 @@ public class TimetableController {
 
     // ─── POST /api/timetable/load-data ───────────────────────────────────────
 
+    @Operation(summary = "Load and normalize input data", description = "Parses sections, bell schedules, curriculum, and teacher allocation files into memory.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Data loaded successfully"),
+            @ApiResponse(responseCode = "500", description = "Failed to load data")
+    })
     @PostMapping("/load-data")
     public ResponseEntity<?> loadData() {
         try {
@@ -82,6 +93,12 @@ public class TimetableController {
 
     // ─── POST /api/timetable/generate ────────────────────────────────────────
 
+    @Operation(summary = "Generate timetable solution", description = "Executes the Google OR-Tools CP-SAT solver against all hard and soft constraints.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Solver execution completed (OPTIMAL, FEASIBLE, or INFEASIBLE)"),
+            @ApiResponse(responseCode = "400", description = "Data has not been loaded yet"),
+            @ApiResponse(responseCode = "500", description = "Solver execution failed unexpectedly")
+    })
     @PostMapping("/generate")
     public ResponseEntity<SolverResponse> generate() {
         if (!ctx.dataLoaded) {
@@ -109,14 +126,16 @@ public class TimetableController {
 
     // ─── GET /api/timetable/sections ─────────────────────────────────────────
 
+    @Operation(summary = "Get all section timetables", description = "Returns the weekly schedule for every section.")
     @GetMapping("/sections")
     public ResponseEntity<?> getSections() {
         if (!ctx.dataLoaded) return notLoaded();
         return ResponseEntity.ok(reporting.getSectionTimetables());
     }
 
+    @Operation(summary = "Get timetable for a single section", description = "Returns the weekly schedule for the specified section ID (e.g. '1A').")
     @GetMapping("/sections/{id}")
-    public ResponseEntity<?> getSection(@PathVariable String id) {
+    public ResponseEntity<?> getSection(@Parameter(description = "Section identifier, e.g. 1A, 10B") @PathVariable String id) {
         if (!ctx.dataLoaded) return notLoaded();
         var timetable = reporting.getSectionTimetable(id);
         if (timetable.isEmpty()) {
@@ -127,14 +146,16 @@ public class TimetableController {
 
     // ─── GET /api/timetable/teachers ─────────────────────────────────────────
 
+    @Operation(summary = "Get all teacher timetables", description = "Returns the weekly schedule for every teacher.")
     @GetMapping("/teachers")
     public ResponseEntity<?> getTeachers() {
         if (!ctx.dataLoaded) return notLoaded();
         return ResponseEntity.ok(reporting.getTeacherTimetables());
     }
 
+    @Operation(summary = "Get timetable for a single teacher", description = "Returns the weekly schedule for the specified teacher code (e.g. 'T01').")
     @GetMapping("/teachers/{code}")
-    public ResponseEntity<?> getTeacher(@PathVariable String code) {
+    public ResponseEntity<?> getTeacher(@Parameter(description = "Teacher code, e.g. T01") @PathVariable String code) {
         if (!ctx.dataLoaded) return notLoaded();
         var timetable = reporting.getTeacherTimetable(code);
         if (timetable.isEmpty()) {
@@ -145,6 +166,7 @@ public class TimetableController {
 
     // ─── GET /api/timetable/conflicts ────────────────────────────────────────
 
+    @Operation(summary = "Get conflict report", description = "Returns data gaps, unassigned slots, teacher workload mismatches, and scheduling conflicts.")
     @GetMapping("/conflicts")
     public ResponseEntity<?> getConflicts() {
         if (!ctx.dataLoaded) return notLoaded();
@@ -153,6 +175,7 @@ public class TimetableController {
 
     // ─── GET /api/timetable/status ───────────────────────────────────────────
 
+    @Operation(summary = "Get current solver and application status", description = "Returns whether data is loaded, solver status, wall time, and solution summary.")
     @GetMapping("/status")
     public ResponseEntity<?> getStatus() {
         Map<String, Object> status = new LinkedHashMap<>();
@@ -167,6 +190,7 @@ public class TimetableController {
 
     // ─── GET /api/timetable/sections-list ────────────────────────────────────
 
+    @Operation(summary = "List all sections metadata", description = "Returns the list of all registered sections.")
     @GetMapping("/sections-list")
     public ResponseEntity<?> getSectionsList() {
         if (!ctx.dataLoaded) return notLoaded();
@@ -175,6 +199,7 @@ public class TimetableController {
 
     // ─── GET /api/timetable/teachers-list ────────────────────────────────────
 
+    @Operation(summary = "List all teachers metadata", description = "Returns the roster of all teachers.")
     @GetMapping("/teachers-list")
     public ResponseEntity<?> getTeachersList() {
         if (!ctx.dataLoaded) return notLoaded();

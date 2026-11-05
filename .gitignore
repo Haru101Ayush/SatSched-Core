@@ -148,3 +148,75 @@ lerna-debug.log*
 **/*.jks
 **/*.keystore
 
+
+# ---------------------------------------------------------------
+# Anti-Gravity & AI Assistant Planning Files
+# ---------------------------------------------------------------
+
+# Google Antigravity / Gemini / Agent directories & artifacts
+**/.antigravity/
+**/.gemini/
+**/.agent/
+**/.agents/
+**/brain/
+**/.brain/
+**/scratch/
+**/.scratch/
+
+# Planning, task, and walkthrough documents
+IMPLEMENTATION_PLAN.md
+implementation_plan.md
+task.md
+TASK.md
+planning.md
+PLANNING.md
+scratchpad.md
+SCRATCHPAD.md
+walkthrough.md
+WALKTHROUGH.md
+plan.md
+PLAN.md
+**/*.plan.md
+**/*.planning.md
+**/.planning/
+
+# Claude & other AI assistant files / instructions
+**/.claude/
+CLAUDE.md
+claude.md
+**/.cursor/
+**/.cursorrules
+**/.windsurf/
+**/.codeium/
+**/.continue/
+
+
+# ---------------------------------------------------------------
+# Cloud & Infrastructure Planning / Deployment Files
+# ---------------------------------------------------------------
+
+# Cloud provider CLI configs & local state
+**/.aws/
+**/.azure/
+**/.gcloud/
+**/.gcp/
+
+# Terraform / OpenTofu state, execution plans & cache
+**/.terraform/
+*.tfplan
+*.tfplan.*
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+
+# Serverless, CDK, and CloudFormation deployment artifacts
+**/.serverless/
+**/.aws-sam/
+**/cdk.out/
+
+# Cloud planning & deployment spec artifacts
+**/cloud-plan*
+**/deployment-plan*
+**/*.cloudplan
+
+

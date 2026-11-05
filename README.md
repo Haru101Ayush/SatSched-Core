@@ -2,6 +2,16 @@
 
 A complete school timetable generator that automatically creates conflict-free weekly schedules for all 41 sections across 44 teachers using Google OR-Tools CP-SAT. Built with **Java 21 + Spring Boot** (backend) and **Next.js 14** (frontend).
 
+> 🎥 **Demo Walkthrough Video:** [Watch on Google Drive](https://drive.google.com/file/d/1SPsH9Fj9u9TBX8FEOTyFD_vlt0D33-6M/view?usp=sharing)
+
+| Resource | URL | Description |
+|---|---|---|
+| **Demo Video** | [Google Drive Demo](https://drive.google.com/file/d/1SPsH9Fj9u9TBX8FEOTyFD_vlt0D33-6M/view?usp=sharing) | Video walkthrough demonstrating the scheduler and UI |
+| **Frontend UI** | [http://localhost:3000](http://localhost:3000) | Interactive dashboard, section timetables, teacher views |
+| **Swagger UI** | [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html) | Interactive OpenAPI / Swagger documentation & test console |
+| **Backend API** | [http://localhost:8080/api/timetable](http://localhost:8080/api/timetable) | REST API root endpoint |
+| **OpenAPI Spec** | [http://localhost:8080/v3/api-docs](http://localhost:8080/v3/api-docs) | OpenAPI 3 JSON specification |
+
 ---
 
 ## Table of Contents
@@ -151,7 +161,10 @@ Once you see this line, the backend is ready:
 Started TimetableschedulerApplication in X.XXX seconds
 ```
 
-The backend is now running at **http://localhost:8080**
+The backend is now running at **http://localhost:8080**  
+A browser window will automatically pop up with **Swagger UI** at:
+👉 **[http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)**  
+*(You can disable this behavior anytime by setting `app.open-browser-on-startup=false` in `application.properties`)*.
 
 > **Note:** The backend reads data files relative to the project root folder. Always run this command from inside the `timetablescheduler/` directory.
 
@@ -283,6 +296,12 @@ curl http://localhost:8080/api/timetable/status
 ## 7. API Reference
 
 All endpoints are under `http://localhost:8080/api/timetable`.
+
+### Interactive Documentation (Swagger UI)
+- **Swagger UI:** [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+- **OpenAPI 3 JSON Spec:** [http://localhost:8080/v3/api-docs](http://localhost:8080/v3/api-docs)
+
+### Endpoints Table
 
 | Method | Endpoint | Description |
 |---|---|---|
